@@ -1,3 +1,5 @@
+import { FilterValueType } from './App'
+
 type TaskType = {
   id: number
   title: string
@@ -7,6 +9,8 @@ type TaskType = {
 type PropsType = {
   title: string
   task: TaskType[]
+  removeTask: (taskId: number) => void
+  changeFilter: (value: FilterValueType) => void
 }
 
 export function Todoist(props: PropsType) {
@@ -18,23 +22,44 @@ export function Todoist(props: PropsType) {
         <button>+</button>
       </div>
       <ul>
-        <li>
-          <input type="checkbox" checked={true} />
-          <span>{props.task[0].title}</span>
-        </li>
-        <li>
-          <input type="checkbox" checked={true} />
-          <span>J{props.task[1].title}</span>
-        </li>
-        <li>
-          <input type="checkbox" checked={false} />
-          <span>{props.task[2].title}</span>
-        </li>
+        {props.task.map((task) => {
+          return (
+            <li>
+              <input type="checkbox" checked={task.isDone} />
+              <span>{task.title}</span>
+              <button
+                onClick={() => {
+                  props.removeTask(task.id)
+                }}
+              >
+                X
+              </button>
+            </li>
+          )
+        })}
       </ul>
       <div>
-        <button>All</button>
-        <button>Active</button>
-        <button>Completed</button>
+        <button
+          onClick={() => {
+            props.changeFilter('all')
+          }}
+        >
+          All
+        </button>
+        <button
+          onClick={() => {
+            props.changeFilter('active')
+          }}
+        >
+          Active
+        </button>
+        <button
+          onClick={() => {
+            props.changeFilter('completed')
+          }}
+        >
+          Completed
+        </button>
       </div>
     </div>
   )
